@@ -1,24 +1,24 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	jGorm "github.com/jinzhu/gorm"
 	"github.com/satori/go.uuid"
 	"log"
 	"time"
 )
 
-func RegisterCallbacks(db *gorm.DB) {
+func RegisterCallbacks(db *jGorm.DB) {
 	db.Callback().Create().Before("gorm:create").Register("my_plugin:before_create", beforeCreate)
 	db.Callback().Update().Before("gorm:update").Register("my_plugin:before_update", beforeUpdate)
 	db.Callback().Delete().Before("gorm:delete").Register("my_plugin:before_delete", beforeDelete)
 	db.Callback().Query().Before("gorm:query").Register("my_plugin:before_query", beforeQuery)
 }
 
-func beforeQuery(scope *gorm.Scope) {
+func beforeQuery(scope *jGorm.Scope) {
 	scope.Search.Where("deleted = 0")
 }
 
-func beforeCreate(scope *gorm.Scope) {
+func beforeCreate(scope *jGorm.Scope) {
 	id := uuid.NewV4().String()
 
 	field, ok := scope.FieldByName("id")
@@ -48,7 +48,7 @@ func beforeCreate(scope *gorm.Scope) {
 	}
 }
 
-func beforeUpdate(scope *gorm.Scope) {
+func beforeUpdate(scope *jGorm.Scope) {
 	field, ok := scope.FieldByName("updated")
 	if ok == true && field.IsBlank {
 		err := scope.SetColumn("updated", time.Now().Unix())
@@ -58,7 +58,7 @@ func beforeUpdate(scope *gorm.Scope) {
 	}
 }
 
-func beforeDelete(scope *gorm.Scope) {
+func beforeDelete(scope *jGorm.Scope) {
 	field, ok := scope.FieldByName("deleted")
 	if ok == true && field.IsBlank {
 		err := scope.SetColumn("deleted", time.Now().Unix())
