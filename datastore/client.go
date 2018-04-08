@@ -20,15 +20,15 @@ func kind(from interface{}) string {
 
 func (c *Client) Get(ctx context.Context, model interface{}, opts ...store.QueryOption) error {
 	raw := datastore.NewQuery(kind(model))
-	q := store.Query(&Query{raw})
+	var q store.Query = &Query{raw}
 
 	// apply options to the query
 	for _, opt := range opts {
 		q = opt(q)
 	}
-	q = q.Limit(1)
+	q = q.Limit(1).KeysOnly()
 
-	keys, err := c.Client.GetAll(ctx, raw.KeysOnly(), nil)
+	keys, err := c.Client.GetAll(ctx, q.Raw().(*datastore.Query), nil)
 	if err != nil {
 		return err
 	}
