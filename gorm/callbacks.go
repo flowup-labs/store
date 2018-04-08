@@ -1,10 +1,10 @@
 package gorm
 
 import (
-	jGorm "github.com/jinzhu/gorm"
-	"github.com/satori/go.uuid"
 	"log"
 	"time"
+
+	jGorm "github.com/jinzhu/gorm"
 )
 
 func RegisterCallbacks(db *jGorm.DB) {

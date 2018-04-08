@@ -16,5 +16,7 @@ type Query interface {
 	Limit(limit int) Query
 }
 
+type QueryOption func(Query) Query
+
 type Transaction interface {
 }

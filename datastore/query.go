@@ -6,7 +6,7 @@ import (
 )
 
 type Query struct {
-	ds.Query
+	*ds.Query
 }
 
 func (q *Query) Where(field string, op string, val interface{}) store.Query {
